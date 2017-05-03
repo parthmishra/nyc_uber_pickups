@@ -23,7 +23,14 @@ for index, row in locationIds.iterrows():
     else:
         puma_num_rides[puma] += num_rides
 
+#print(puma_num_rides)
+df = pd.DataFrame.from_dict(puma_num_rides,orient='index')
+print(df.columns)
 
+#print(df)
+#df.to_csv('puma_rides.csv')
+
+"""
 print(puma_num_rides[3701])
 
 with open("nyc.json") as f:
@@ -35,3 +42,4 @@ for feature in data['features']:
 
 with open('data.geojson', 'w') as outfile:
     json.dump(data, outfile)
+"""
