@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 
-df = pd.read_csv("gis_pop_rides.csv")
+df = pd.read_csv("gis_inc_rides.csv")
 """
 sns.set(context="paper", font="monospace")
 
@@ -28,6 +28,5 @@ for column in df:
         output[column] = corr
 
 
-output = pd.DataFrame.from_dict(output,orient="index",names=['Statistic','Correlation'])
-output.sort()
-output.to_csv('gis_pop_corr.csv')
+output = pd.DataFrame.from_dict(output,orient="index")
+output.to_csv('gis_inc_corr.csv')
