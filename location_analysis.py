@@ -28,11 +28,18 @@ for i, row in puma_rides.iterrows():
 """
 
 
+#gis_pop.sort('PUMA_ID',inplace=True)
+#puma_rides.sort('PUMA',inplace=True)
+print(puma_rides["num_rides"])
 gis_pop['num_rides'] = puma_rides['num_rides']
+print(gis_pop['num_rides'])
 
 
+"""
 #print(len(gis_pop.columns))
 gis_pop.drop(['Pop16plZ','CvLFZ','PctUEmE','PctUEmM','F16plZ','MnTrvTmP','MnTrvTmZ','CvEm16plZ','CvEm16plZ'],1,inplace=True)
 #print(len(gis_pop.columns))
 #loc_puma.to_csv('locations_with_puma_gen.csv')
+"""
+
 gis_pop.to_csv('gis_pop_rides.csv')
