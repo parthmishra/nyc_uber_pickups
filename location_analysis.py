@@ -9,7 +9,6 @@ gis_pop = pd.read_csv('gis_pop.csv')
 gis_inc = pd.read_csv('gis_inc.csv')
 
 #pd.to_numeric(loc_puma["PUMA"])
-"""
 for i, row in puma_rides.iterrows():
     puma = row['PUMA']
     #print(puma)
@@ -25,7 +24,7 @@ for i, row in puma_rides.iterrows():
         if gis_puma == puma:
             medIncome = krow['MdHHIncE']
             loc_puma.set_value(i, 'medIncome', medIncome)
-"""
+
 
 
 #gis_pop.sort('PUMA_ID',inplace=True)
