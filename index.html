@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+body {
+  font: 12px sans-serif;
+}
+
+path {
+  stroke-width: 1px;
+  stroke: white;
+  fill: #999;
+  cursor: pointer;
+}
+
+path.q0-7 {
+  fill: #eff3ff;
+}
+
+path.q1-7 {
+  fill: #c6dbef;
+}
+
+path.q2-7 {
+  fill: #9ecae1;
+}
+
+path.q3-7 {
+  fill: #6baed6;
+}
+
+path.q4-7 {
+  fill: #4292c6;
+}
+
+path.q5-7 {
+  fill: #2171b5;
+}
+
+path.q6-7 {
+  fill: #084594;
+}
+
+div.tooltip {
+  position: absolute;
+  background-color: white;
+  border: 1px solid black;
+  color: black;
+  font-weight: bold;
+  padding: 4px 8px;
+  display: none;
+}
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.js"></script>
+<script>
+
+//Map dimensions (in pixels)
+var width = 1920,
+    height = 1080;
+
+//Map projection
+var projection = d3.geo.mercator()
+    .scale(39155.11644043166)
+    .center([-73.97780164716029,40.70616251052755]) //projection center
+    .translate([width/2,height/2]) //translate to center the map in view
+
+//Generate paths based on projection
+var path = d3.geo.path()
+    .projection(projection);
+
+//Create an SVG
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+//Group for the map features
+var features = svg.append("g")
+    .attr("class","features");
+
+//Create choropleth scale
+var color = d3.scale.quantize()
+    .domain([450,3315480])
+    .range(d3.range(7).map(function(i) { return "q" + i + "-7"; }));
+
+//Create zoom/pan listener
+//Change [1,Infinity] to adjust the min/max zoom scale
+var zoom = d3.behavior.zoom()
+    .scaleExtent([1, Infinity])
+    .on("zoom",zoomed);
+
+svg.call(zoom);
+
+//Create a tooltip, hidden at the start
+var tooltip = d3.select("body").append("div").attr("class","tooltip");
+
+d3.json("data.geojson",function(error,geodata) {
+  if (error) return console.log(error); //unknown error, check the console
+
+  //Create a path for each map feature in the data
+  features.selectAll("path")
+    .data(geodata.features)
+    .enter()
+    .append("path")
+    .attr("d",path)
+    .attr("class", function(d) { return (typeof color(d.properties.num_rides) == "string" ? color(d.properties.num_rides) : ""); })
+    .on("mouseover",showTooltip)
+    .on("mousemove",moveTooltip)
+    .on("mouseout",hideTooltip)
+    .on("click",clicked);
+
+});
+
+// Add optional onClick events for features here
+// d.properties contains the attributes (e.g. d.properties.name, d.properties.population)
+function clicked(d,i) {
+
+}
+
+
+//Update map on zoom/pan
+function zoomed() {
+  features.attr("transform", "translate(" + zoom.translate() + ")scale(" + zoom.scale() + ")")
+      .selectAll("path").style("stroke-width", 1 / zoom.scale() + "px" );
+}
+
+
+//Position of the tooltip relative to the cursor
+var tooltipOffset = {x: 5, y: -25};
+
+//Create a tooltip, hidden at the start
+function showTooltip(d) {
+  moveTooltip();
+
+  tooltip.style("display","block")
+      .html("PUMA: "+d.properties.PUMA+"<br/>"+
+            "Number of Rides: "+d.properties.num_rides+"<br/>"+
+            "Total Population: "+d.properties.totalPop+"<br/>"+
+            "Median Income: "+d.properties.medIncome+"<br/>"+
+            "% Walk to Work: "+d.properties.perWalked+"<br/>"+
+            "% Public Transport to Work: "+d.properties.percentPub);
+
+}
+
+//Move the tooltip to track the mouse
+function moveTooltip() {
+  tooltip.style("top",(d3.event.pageY+tooltipOffset.y)+"px")
+      .style("left",(d3.event.pageX+tooltipOffset.x)+"px");
+}
+
+//Create a tooltip, hidden at the start
+function hideTooltip() {
+  tooltip.style("display","none");
+}
+</script>
