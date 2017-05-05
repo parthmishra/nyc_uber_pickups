@@ -1,5 +1,7 @@
 # NYC Uber Pickup Analysis
 
+![]('viz_screen.png')
+
 ### Team Members
 
 * [Parth Mishra](http://github.com/parthmishra)
