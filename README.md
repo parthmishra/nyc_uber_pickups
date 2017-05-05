@@ -1,6 +1,6 @@
 # NYC Uber Pickup Analysis
 
-![]('viz_screen.png')
+![](viz_screen.png)
 
 ### Team Members
 
